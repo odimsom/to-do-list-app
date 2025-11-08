@@ -20,9 +20,17 @@ const register = async () => {
     email: email.value,
     passwordHash: password.value,
   }
+
+  const validationResult = userService.validateUserCredentials(newUser.email, newUser.passwordHash)
+
+  if (validationResult.IsSuccess) {
+    console.log('User with this email already exists')
+    return
+  }
+
   const result = userService.createUser(newUser)
   if (result.IsSuccess) {
-    router.push({ name: '/login', query: { userId: result.Data?.id } })
+    router.push('/login')
   } else {
     console.log('Error registering user:', result.Errors)
   }

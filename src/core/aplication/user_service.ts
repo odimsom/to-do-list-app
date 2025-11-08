@@ -1,3 +1,4 @@
+import type OperationResult from '../dominio/common/operation_result'
 import type User from '../dominio/user'
 import LocalStorageManager from '../utils/local_storage_manager'
 
@@ -20,9 +21,18 @@ export default class UserService {
     return this.LocalStorage.load(`user_${userId}`)
   }
 
-  validateUserCredentials(email: string, password: string) {
+  validateUserCredentials(email: string, password: string): OperationResult<User> {
     const users = this.LocalStorage.loadAll()
-    return users.Data?.find((user) => user.email === email && user.passwordHash === password)
+    const user = users.Data?.find((user) => user.email === email && user.passwordHash === password)
+    if (user) {
+      return { IsSuccess: true, Data: user, Message: 'User authenticated successfully' }
+    } else {
+      return {
+        IsSuccess: false,
+        Errors: ['Invalid email or password'],
+        Message: 'Authentication failed',
+      }
+    }
   }
 
   updateUser(user: User) {

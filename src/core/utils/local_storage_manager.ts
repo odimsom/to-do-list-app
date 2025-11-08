@@ -27,9 +27,10 @@ export default class LocalStorageManager<T> {
       const items: T[] = []
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i)
-        if (key) {
+        if (key && key.startsWith('user_')) {
           const item = localStorage.getItem(key)
           if (item) {
+            console.log(item)
             const parsedItem: T = JSON.parse(item)
             items.push(parsedItem)
           }

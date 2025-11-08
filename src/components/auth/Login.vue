@@ -13,11 +13,11 @@ const password = ref('')
 const userService = new UserService()
 
 const login = async () => {
-  const user = userService.validateUserCredentials(email.value, password.value)
-  if (user !== undefined) {
-    router.push({ name: '/Home', query: { userId: user.id } })
+  const result = userService.validateUserCredentials(email.value, password.value)
+  if (result.IsSuccess) {
+    router.push('/home')
   } else {
-    console.log('Invalid credentials')
+    console.log('Invalid credentials:', result.Errors)
   }
 }
 </script>
